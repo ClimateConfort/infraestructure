@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Hemen bukatu diren tofu komandoak gehitzen joan
+# Adibidez: 
+# tofu init && tofu apply makina1/

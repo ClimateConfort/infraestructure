@@ -1,0 +1,13 @@
+- name: Install nginx package
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - nginx
+- name: Ensure nginx is running
+  become: yes
+  service:
+    name: nginx
+    state: started
+    enabled: yes

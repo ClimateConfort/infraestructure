@@ -3,3 +3,11 @@
 # Hemen bukatu diren tofu komandoak gehitzen joan
 # Adibidez: 
 # tofu init && tofu apply makina1/
+
+echo "Creating infraestructure...."
+echo ""
+
+echo "###############################"
+echo "####### REVERSE PROXY #########"
+echo "###############################"
+cd reverse-proxy; tofu init && tofu apply

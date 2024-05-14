@@ -6,9 +6,20 @@
     state: present
   loop:
     - nginx
+- name: Copy sonarqube config
+  become: yes
+  copy:
+    src: "../files/sonarqube.climateconfort.duckdns.org"
+    dest: "/etc/nginx/sites-available/sonarqube.climateconfort.duckdns.org"
+- name: Activate sonarqube config
+  become: yes
+  file:
+    src: "/etc/nginx/sites-available/sonarqube.climateconfort.duckdns.org"
+    dest: "/etc/nginx/sites-enabled/sonarqube.climateconfort.duckdns.org"
+    state: link
 - name: Ensure nginx is running
   become: yes
   service:
     name: nginx
-    state: started
+    state: restarted
     enabled: yes

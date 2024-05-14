@@ -10,9 +10,9 @@ echo ""
 echo "###############################"
 echo "####### REVERSE PROXY #########"
 echo "###############################"
-cd reverse-proxy; tofu init && tofu apply
+cd reverse-proxy; tofu init && tofu apply -auto-approve 
 
 echo "###############################"
 echo "####### REVERSE PROXY #########"
 echo "###############################"
-cd sonarqube; tofu init && tofu apply
+cd sonarqube; tofu init && tofu apply -auto-approve

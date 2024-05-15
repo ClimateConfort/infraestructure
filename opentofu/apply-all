@@ -10,19 +10,18 @@ PIDS=""
 echo "Creating infraestructure...."
 echo ""
 
-echo "###############################"
-echo "####### REVERSE PROXY #########"
-echo "###############################"
-cd reverse-proxy; tofu init; tofu apply -auto-approve &
-PIDS="$PIDS $!"
+# echo "###############################"
+# echo "####### SonarQube #############"
+# echo "###############################"
+# cd ../sonarqube; tofu init; tofu apply -auto-approve
 
-sleep 1
+# sleep 1
 
-echo "###############################"
-echo "####### SonarQube #############"
-echo "###############################"
-cd ../sonarqube; tofu init; tofu apply -auto-approve &
-PIDS="$PIDS $!"
+# echo "###############################"
+# echo "####### REVERSE PROXY #########"
+# echo "###############################"
+# cd reverse-proxy; tofu init; tofu apply -auto-approve &
+# PIDS="$PIDS $!"
 
 # Itxaron prozesu guztiak bukatzea
 wait $PIDS

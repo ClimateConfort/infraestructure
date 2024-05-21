@@ -1,0 +1,4 @@
+- name: Copy cassandra.yaml to the remote node
+  copy:
+    src: /Users/macbook/Desktop/Mondragon/6.semestrea/PBL6/infraestructure/opentofu/cassandra/config/cassandra.yaml
+    dest: cassandra.yaml

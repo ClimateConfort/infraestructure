@@ -9,6 +9,11 @@
   copy:
     src: ../files/cassandra.yaml
     dest: /etc/cassandra/cassandra.yaml
+#- name: Copy cassandra directory to the remote node
+#  become: yes
+#  copy:
+#    src: ../files/cassandra
+#    dest: /etc/
 - name: Set permissions and ownership for cassandra.yaml
   become: yes
   ansible.builtin.file:

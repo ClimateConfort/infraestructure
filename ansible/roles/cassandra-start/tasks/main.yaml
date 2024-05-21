@@ -18,5 +18,5 @@
       - cassandra-data:/var/lib/cassandra
     env:
       CASSANDRA_BROADCAST_ADDRESS: "{{ ansible_default_ipv4.address }}"
-      CASSANDRA_SEEDS: "node1.c.pbl6-422712.internal"
+      CASSANDRA_SEEDS: "node1.c.pbl6-422712.internal,node2.c.pbl6-422712.internal"
 

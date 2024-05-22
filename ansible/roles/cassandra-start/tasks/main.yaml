@@ -14,7 +14,7 @@
       - "9042:9042"
       - "9160:9160"
     volumes:
-      - /home/user/cassandra.yaml:/etc/cassandra/cassandra.yaml
+      - /etc/cassandra/cassandra.yaml:/etc/cassandra/cassandra.yaml
     env:
       CASSANDRA_BROADCAST_ADDRESS: "{{ ansible_default_ipv4.address }}"
       CASSANDRA_SEEDS: "node1.c.pbl6-422712.internal"

@@ -5,4 +5,5 @@
   roles:
   - config-file-copy
   - install-docker
+  - cassandra-volume-create
   - cassandra-start

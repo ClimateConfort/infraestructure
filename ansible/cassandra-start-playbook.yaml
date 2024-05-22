@@ -3,8 +3,6 @@
   hosts: all
   remote_user: user
   roles:
-  #- py-script-run
   - config-file-copy
-  - config-file-permission-set
   - install-docker
   - cassandra-start

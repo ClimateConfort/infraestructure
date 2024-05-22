@@ -1,7 +1,0 @@
-- name: Set permissions and ownership for cassandra.yaml
-  become: yes
-  ansible.builtin.file:
-    path: /home/user/cassandra.yaml
-    mode: '0666'
-    owner: 999
-    group: root

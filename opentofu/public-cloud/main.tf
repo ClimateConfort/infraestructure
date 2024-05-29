@@ -8,6 +8,7 @@ provider "google" {
 # List of instance names
 locals {
   instance_names = ["node1", "node2", "node3"]
+  
 }
 
 resource "google_compute_instance" "node" {
@@ -47,7 +48,7 @@ resource "google_compute_instance" "node" {
     provisioning_model  = "STANDARD"
   }
 
-  tags = ["http-server", "https-server"]
+  tags = ["http-server", "https-server", "cluster"]
 
   service_account {
     email  = var.gcp_account_email
@@ -64,12 +65,11 @@ resource "google_compute_instance" "node" {
   }
 
   provisioner "local-exec" {
-
-    command = <<EOT
-      
+    command = <<-EOT
       ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ${self.network_interface.0.access_config.0.nat_ip}, --private-key=../../credentials/ssh-keys/key ../../ansible/cassandra-start-playbook.yaml
     EOT
   }
+
 }
 
 resource "google_compute_firewall" "node-ports" {
@@ -82,5 +82,5 @@ resource "google_compute_firewall" "node-ports" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["node"]
+  target_tags   = ["cluster"]
 }

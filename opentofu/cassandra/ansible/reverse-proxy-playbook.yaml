@@ -1,8 +1,0 @@
----
-- name: Reverse Proxy Playbook
-  hosts: all
-  remote_user: user
-  roles:
-    - system-upgrade
-    - install-nginx
-    - install-duckdns

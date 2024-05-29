@@ -3,7 +3,7 @@
   hosts: all
   remote_user: user
   roles:
-  - config-file-copy
   - install-docker
+  - cassandra-config-file-copy
   - cassandra-volume-create
   - cassandra-start

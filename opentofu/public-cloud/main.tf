@@ -66,7 +66,8 @@ resource "google_compute_instance" "node" {
 
   provisioner "local-exec" {
     command = <<-EOT
-      ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ${self.network_interface.0.access_config.0.nat_ip}, --private-key=../../credentials/ssh-keys/key ../../ansible/cassandra-start-playbook.yaml
+      ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ${self.network_interface.0.access_config.0.nat_ip}, --private-key=../../credentials/ssh-keys/key ../../ansible/cassandra-start-playbook.yaml &&
+      ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ${self.network_interface.0.access_config.0.nat_ip}, --private-key=../../credentials/ssh-keys/key ../../ansible/nifi-start-playbook.yaml
     EOT
   }
 
@@ -78,7 +79,7 @@ resource "google_compute_firewall" "node-ports" {
 
   allow {
     protocol = "tcp"
-    ports    = ["7000", "7001", "7199", "9042", "9160"]
+    ports    = ["7000", "7001", "7199", "9042", "9160", "8443", "10000", "6342", "2181", "2281", "2881", "3881", "4881", "9999"]
   }
 
   source_ranges = ["0.0.0.0/0"]

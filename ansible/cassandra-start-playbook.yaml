@@ -1,0 +1,9 @@
+---
+- name: Cassandra Install
+  hosts: all
+  remote_user: user
+  roles:
+  - install-docker
+  - cassandra-config-file-copy
+  - cassandra-volume-create
+  - cassandra-start

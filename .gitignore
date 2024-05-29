@@ -1,0 +1,2 @@
+*.DS_Store
+ansible/roles/cassandra-config-file-copy/files/cassandra/*

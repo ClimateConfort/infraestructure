@@ -1,0 +1,79 @@
+- name: Ensure /etc/nifi directory exists
+  become: yes
+  file:
+    path: /etc/nifi
+    state: directory
+    mode: '0755'
+- name: Copy nifi.properties to the remote node
+  become: yes
+  copy:
+    src: ../files/nifi.properties
+    dest: /etc/nifi/nifi.properties
+
+- name: Copy zookeeper.properties to the remote node
+  become: yes
+  copy:
+    src: ../files/zookeeper.properties
+    dest: /etc/nifi/zookeeper.properties
+
+- name: Copy state-management.xml to the remote node
+  become: yes
+  copy:
+    src: ../files/state-management.xml
+    dest: /etc/nifi/state-management.xml
+
+- name: Copy Dockerfile to the remote node
+  become: yes
+  copy:
+    src: ../files/Dockerfile
+    dest: /etc/nifi/Dockerfile
+
+- name: Set permissions and ownership for nifi.properties
+  become: yes
+  ansible.builtin.file:
+    path: /etc/nifi/nifi.properties
+    mode: '0644'
+    owner: root
+    group: root
+- name: Set permissions and ownership for zookeeper.properties
+  become: yes
+  ansible.builtin.file:
+    path: /etc/nifi/zookeeper.properties
+    mode: '0644'
+    owner: root
+    group: root
+- name: Set permissions and ownership for state-management.xml
+  become: yes
+  ansible.builtin.file:
+    path: /etc/nifi/state-management.xml
+    mode: '0644'
+    owner: root
+    group: root
+- name: Set permissions and ownership for Dockerfile
+  become: yes
+  ansible.builtin.file:
+    path: /etc/nifi/Dockerfile
+    mode: '0777'
+    owner: root
+    group: root
+- name: Get hostname
+  ansible.builtin.set_fact:
+    hostname: "{{ ansible_fqdn }}"
+
+- name: Extract node index from hostname
+  ansible.builtin.set_fact:
+    node_index: "{{ hostname.split('.')[0][-1] | int }}"
+
+- name: Set index in myid file
+  become: yes
+  ansible.builtin.lineinfile:
+    dest: /etc/nifi/zookeeper/myid
+    create: yes
+    line: "{{ node_index }}"
+- name: Set permissions and ownership for myid
+  become: yes
+  ansible.builtin.file:
+    path: /etc/nifi/zookeeper/myid
+    mode: '0644'
+    owner: root
+    group: root

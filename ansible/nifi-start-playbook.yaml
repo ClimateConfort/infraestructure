@@ -1,0 +1,7 @@
+---
+- name: Nifi Install
+  hosts: all
+  remote_user: user
+  roles:
+  - nifi-config-file-copy
+  - nifi-start

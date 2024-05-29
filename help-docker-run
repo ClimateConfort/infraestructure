@@ -1,0 +1,5 @@
+#NIFI DOCKER RUN
+
+docker run -d --name nifi -h nifi -p 8080:8080 -p 8443:8443 -e NIFI_CLUSTER_NODE_ADDRESS=node1.c.pbl6-422712.internal -v nifi.properties:/opt/nifi/nifi-current/conf/nifi.properties apache/nifi:latest
+
+#cambiar el puerto 8080,8081,8082 de la vm

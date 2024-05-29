@@ -1,0 +1,19 @@
+- name: Build Nifi Docker image
+  become: yes
+  docker_image:
+    build:
+      path: /etc/nifi
+    source: build
+    name: nifi
+
+- name: Run Docker container
+  become: yes
+  docker_container:
+    name: nifi
+    image: nifi
+    state: started
+    detach: yes
+    hostname: "nifi"
+#    auto_remove: true
+    ports:
+      - "8443:8443"

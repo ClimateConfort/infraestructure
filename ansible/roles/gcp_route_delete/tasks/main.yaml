@@ -1,0 +1,7 @@
+- name: Google Cloud Platform-en aurretik sortutako route-ak ezabatu
+  ansible.builtin.command:
+    cmd: "{{ item }}"
+  loop:
+    - "gcloud beta compute routes delete {{ gcp_route_ovpn }} --quiet"
+    - "gcloud beta compute routes delete {{ gcp_route_pm }} --quiet"
+  ignore_errors: true

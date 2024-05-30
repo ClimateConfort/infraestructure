@@ -1,0 +1,7 @@
+---
+- name: Google Cloud Platform route destroy
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+  - gcp_route_destroy

@@ -1,0 +1,9 @@
+---
+
+- name: OpenVPN
+  hosts: all
+  remote_user: user
+  become: yes
+  become_method: sudo
+  roles:
+  - gcp_ovpn_setup

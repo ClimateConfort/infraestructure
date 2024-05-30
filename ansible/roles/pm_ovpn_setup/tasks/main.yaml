@@ -1,0 +1,67 @@
+- name: Sistema eguneratu
+  become: false
+  apt:
+    upgrade: yes
+    update_cache: yes
+
+- name: OpenVPN instalatu
+  become: false
+  apt:
+    name: openvpn
+    state: latest
+
+- name: ovpn.service fitxategia helburuko makinara pasa
+  ansible.builtin.copy:
+    src: "ovpn.service"
+    dest: "/etc/systemd/system/ovpn.service"
+    owner: "root"
+    group: "root"
+
+- name: konfigurazioa.conf fitxategia helburuko makinara pasa
+  ansible.builtin.copy:
+    src: "konfigurazioa.conf"
+    dest: "/etc/openvpn/client/konfigurazioa.conf"
+    owner: "root"
+    group: "root"
+
+- name: gakoa.key fitxategia helburuko makinara pasa
+  ansible.builtin.copy:
+    src: "gakoa.key"
+    dest: "/etc/openvpn/client/gakoa.key"
+    owner: "root"
+    group: "root"
+
+- name: zertifikatua.crt fitxategia helburuko makinara pasa
+  ansible.builtin.copy:
+    src: "zertifikatua.crt"
+    dest: "/etc/openvpn/client/zertifikatua.crt"
+    owner: "root"
+    group: "root"
+
+- name: ovpn.service zerbitzua aktibatu
+  ansible.builtin.systemd_service:
+    name: ovpn
+    enabled: true
+
+- name: /etc/hosts fitxategian IPa eguneratu
+  ansible.builtin.lineinfile:
+    path: "/etc/hosts"
+    line: "{{ ovpnciip }} ovpn.gcp"
+    state: present
+    create: yes
+
+- name: ovpn.service zerbitzua hasi
+  ansible.builtin.systemd_service:
+    name: ovpn
+    state: started
+
+- name: Sistema router bilakatu
+  ansible.builtin.lineinfile:
+    path: "/etc/sysctl.conf"
+    search_string: "#net.ipv4.ip_forward=1"
+    line: "net.ipv4.ip_forward=1"
+    state: present
+    create: yes
+
+- name: Sistema router bilakatu
+  ansible.builtin.command: /usr/sbin/sysctl -p

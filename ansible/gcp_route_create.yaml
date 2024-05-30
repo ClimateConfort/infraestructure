@@ -1,0 +1,7 @@
+---
+
+- name: Google Cloud Platform-en route-a sortu
+  hosts: localhost
+  gather_facts: false
+  roles:
+  - gcp_route_create

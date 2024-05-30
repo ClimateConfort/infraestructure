@@ -1,0 +1,7 @@
+---
+
+- name: Google Cloud Platform-eko route-a ezabatu
+  hosts: localhost
+  gather_facts: false
+  roles:
+  - gcp_route_delete

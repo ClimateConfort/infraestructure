@@ -1,0 +1,11 @@
+- name: IP helbide publikoa lortu
+  community.general.ipify_facts:
+  register: ip_publikoa
+
+- name: Google Cloud Platform-en firewall erregela ezabatu eta sortu
+  ansible.builtin.command:
+    cmd: "{{ item }}" 
+  loop:
+    - "gcloud compute --project={{ gcp_proiektua }} firewall-rules delete {{ gcp_firewall_erregela_izena_tcp443 }} --quiet"
+    - "gcloud compute --project={{ gcp_proiektua }} firewall-rules create {{ gcp_firewall_erregela_izena_tcp443 }} --direction=INGRESS --priority=1000 --network={{ gcp_sarea }} --action=ALLOW --rules={{ gcp_firewall_erregela_tcp443 }} --source-ranges={{ ip_publikoa.ansible_facts.ipify_public_ip }}/32"
+  ignore_errors: true

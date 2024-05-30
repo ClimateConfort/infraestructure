@@ -1,0 +1,95 @@
+- name: APT errepositorioan egon daitezkeen aldaketak onartu
+  ansible.builtin.command:
+    cmd: "apt-get update --allow-releaseinfo-change"
+
+- name: OpenVPN instalatu
+  apt:
+    name: openvpn
+    state: latest
+    force: yes
+    update_cache: yes
+
+- name: ovpn.service fitxategia helburuko makinara pasa
+  ansible.builtin.copy:
+    src: "ovpn.service"
+    dest: "/etc/systemd/system/ovpn.service"
+    owner: "root"
+    group: "root"
+
+- name: konfigurazioa.conf fitxategia helburuko makinara pasa
+  ansible.builtin.copy:
+    src: "konfigurazioa.conf"
+    dest: "/etc/openvpn/server/konfigurazioa.conf"
+    owner: "root"
+    group: "root"
+
+- name: push egiteko sareko IP helbidea prestatu
+  set_fact:
+    zenbakiak: "{{ internalip.split('.') }}"
+
+- name: konfigurazioa.conf fitxategiari push route-ak eguneratu
+  ansible.builtin.lineinfile:
+    path: /etc/openvpn/server/konfigurazioa.conf
+    search_string: 'push "route 172.16.0.0 255.255.0.0"       # Zerbitzariak partekatzen duen sare helbide eta maskara'
+    line: 'push "route {{ zenbakiak[0] }}.{{ zenbakiak[1] }}.{{ zenbakiak[2] }}.0 255.255.255.0"     # Zerbitzariak partekatzen duen sare helbide eta maskara'
+
+- name: gakoa.key fitxategia helburuko makinara pasa
+  ansible.builtin.copy:
+    src: "gakoa.key"
+    dest: "/etc/openvpn/server/gakoa.key"
+    owner: "root"
+    group: "root"
+    mode: "0400"
+
+- name: zertifikatua.crt fitxategia helburuko makinara pasa
+  ansible.builtin.copy:
+    src: "zertifikatua.crt"
+    dest: "/etc/openvpn/server/zertifikatua.crt"
+    owner: "root"
+    group: "root"
+    mode: "0400"
+
+- name: /etc/openvpn/ccd karpeta sortu
+  ansible.builtin.file:
+    path: /etc/openvpn/ccd
+    state: directory
+    mode: "0755"
+
+- name: user fitxategia helburuko makinara pasa
+  ansible.builtin.copy:
+    src: "user"
+    dest: "/etc/openvpn/ccd/user"
+    owner: "root"
+    group: "root"
+
+- name: ovpn.service zerbitzua aktibatu
+  ansible.builtin.systemd_service:
+    name: ovpn
+    enabled: true
+
+- name: Sistema router bilakatu
+  ansible.builtin.lineinfile:
+    path: "/etc/sysctl.conf"
+    search_string: "#net.ipv4.ip_forward=1"
+    line: "net.ipv4.ip_forward=1"
+    state: present
+    create: yes
+
+- name: Sistema router bilakatu
+  ansible.builtin.command: /usr/sbin/sysctl -p
+
+- name: ssh zerbitzua portuz aldatu
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    search_string: "Port 443"
+    line: Port 22
+
+- name: ovpn.service zerbitzua hasi
+  ansible.builtin.systemd_service:
+    name: ovpn
+    state: started
+
+- name: ssh.service zerbitzua berrabiarazi
+  ansible.builtin.systemd_service:
+    name: sshd
+    state: restarted

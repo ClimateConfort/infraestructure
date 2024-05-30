@@ -1,0 +1,15 @@
+- name: ovpnclient ct-a hasi
+  community.general.proxmox:
+    vmid: "{{ lookup('file', '../../../../opentofu/ovpn/output/ovpnsc_id.txt').split('/')[-1] }}"
+    api_user: "{{ pm_api_user }}"
+    api_password: "{{ pm_api_password }}"
+    api_host: "{{ pm_api_host }}"
+    state: started
+
+- name: ovpnclient ct-a hasi arte itxaron
+  wait_for:
+    host: "{{ ovpn_bezeroa }}"
+    port: 22
+    delay: 10
+    timeout: 300
+  delegate_to: localhost

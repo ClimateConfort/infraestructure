@@ -1,0 +1,10 @@
+- name: Google Cloud Platform-eko instantzia itzali eta sareko erregelak ezabatu
+  ansible.builtin.command:
+    cmd: "{{ item }}"
+  loop:
+    - "gcloud compute instances stop {{ gcp_ovpnci_name }}"
+    - "gcloud beta compute routes delete {{ gcp_route_ovpn }} --quiet"
+    - "gcloud beta compute routes delete {{ gcp_route_pm }} --quiet"
+    - "gcloud compute --project={{ gcp_proiektua }} firewall-rules delete {{ gcp_firewall_erregela_izena_tcp443 }} --quiet"
+  ignore_errors: true  
+  delegate_to: 127.0.0.1

@@ -1,0 +1,10 @@
+- name: Download proxmox appliance container template on pve1
+  community.general.proxmox_template:
+    node: "{{ item.hostname }}"
+    api_user: "{{ pm_api_user }}"
+    api_password: "{{ pm_api_password }}"
+    api_host: "{{ pm_api_host }}"
+    storage: "{{ pm_ct_template_storage }}"
+    content_type: "{{ pm_ct_template_type }}"
+    template: "{{ pm_ct_template }}"
+  loop: "{{ pm_node }}"

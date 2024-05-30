@@ -1,0 +1,23 @@
+- name: ovpnclient ct-a itzali
+  community.general.proxmox:
+    vmid: "{{ vmid.split('/')[-1] }}"
+    api_user: "{{ pm_api_user }}"
+    api_password: "{{ pm_api_password }}"
+    api_host: "{{ pm_api_host }}"
+    state: stopped
+
+- name: ovpncclient ct-a konfiguratu tun gailua erabili dezan
+  ansible.builtin.lineinfile:
+    path: "/etc/pve/lxc/{{ vmid.split('/')[-1] }}.conf"
+    line: "{{ item }}"
+    state: present
+    create: yes
+  loop: "{{ pm_ct_kernel_config }}"
+
+- name: ovpnclient ct-a hasi
+  community.general.proxmox:
+    vmid: "{{ vmid.split('/')[-1] }}"
+    api_user: "{{ pm_api_user }}"
+    api_password: "{{ pm_api_password }}"
+    api_host: "{{ pm_api_host }}"
+    state: started

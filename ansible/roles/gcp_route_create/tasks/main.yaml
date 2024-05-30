@@ -1,0 +1,9 @@
+- name: Google Cloud Platform-en route-ak ezabatu eta sortu
+  ansible.builtin.command:
+    cmd: "{{ item }}"
+  loop:
+    - "gcloud beta compute routes delete {{ gcp_route_ovpn }} --quiet"
+    - "gcloud beta compute routes delete {{ gcp_route_pm }} --quiet"
+    - "gcloud beta compute routes create {{ gcp_route_ovpn }} --project={{ gcp_proiektua }} --network={{ gcp_sarea }} --priority=1000 --destination-range={{ ovpn_sarea }} --next-hop-address={{ lookup('file', '../../../../opentofu/ovpn/output/ovpnci_internal_ip.txt') }}"
+    - "gcloud beta compute routes create {{ gcp_route_pm }} --project={{ gcp_proiektua }} --network={{ gcp_sarea }} --priority=1000 --destination-range={{ pm_sarea }} --next-hop-address={{ lookup('file', '../../../../opentofu/ovpn/output/ovpnci_internal_ip.txt') }}"
+  ignore_errors: true

@@ -1,0 +1,57 @@
+#########################
+# Google Cloud Platform #
+#########################
+
+gcp_proiektua: pbl6-422712
+
+# VM aldagaiak
+gcp_ovpnci_name: ovpnserver
+
+# Sareko aldagaiak
+gcp_sarea: default
+gcp_route_ovpn: ovpn
+gcp_route_pm: pm
+gcp_firewall_erregela_izena_tcp443: https-allow
+gcp_firewall_erregela_tcp443: 'tcp:443'
+
+
+###########
+# Proxmox #
+###########
+
+pm_api_user: root@pam
+pm_api_password: rootroot
+pm_api_host: 10.0.2.16
+
+# Proxmox node-en aldagaiak
+pm_node:
+  - hostname: pve1
+    ip: 10.0.2.16
+    ssh_private_key: ../../credentials/ssh-keys/pmpve1
+  - hostname: pve2
+    ip: 10.0.2.17
+    ssh_private_key: ../../credentials/ssh-keys/pmpve2
+  - hostname: pve3
+    ip: 10.0.2.18
+    ssh_private_key: ../../credentials/ssh-keys/pmpve3
+pm_sarea: 10.0.2.0/24
+
+# Proxmox-eko vm-en aldagaiak
+pm_ct_template_storage: local
+pm_ct_template_type: vztmpl
+pm_ct_template: debian-12-standard_12.2-1_amd64.tar.zst
+
+pm_ct_kernel_config:
+  - 'lxc.mount.entry: /dev/net dev/net none bind,create=dir'
+  - 'lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file'
+  - 'lxc.cgroup2.devices.allow: c 10:200 rwm'
+  - 'lxc.cgroup.devices.allow: c 10:200 rwm'
+
+
+###########
+# OpenVPN #
+###########
+
+ovpn_ct_ssh_private_key: ../../credentials/ssh-keys/ovpn-pm
+ovpn_sarea: 10.8.0.0/24
+ovpn_bezeroa: 10.0.2.8

@@ -1,0 +1,8 @@
+---
+
+- name: Download CT template
+  hosts: all
+  remote_user: root
+  become: no
+  roles:
+  - pm_ct_template

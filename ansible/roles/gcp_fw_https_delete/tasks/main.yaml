@@ -1,0 +1,4 @@
+- name: Google Cloud Platform-en aurretik sortutako firewall erregela ezabatu
+  ansible.builtin.command:
+    cmd: "gcloud compute --project={{ gcp_proiektua }} firewall-rules delete {{ gcp_firewall_erregela_izena_tcp443 }} --quiet"
+  ignore_errors: true

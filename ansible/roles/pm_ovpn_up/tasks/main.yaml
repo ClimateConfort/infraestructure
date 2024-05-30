@@ -1,0 +1,12 @@
+- name: /etc/hosts fitxategian IPa eguneratu
+  ansible.builtin.lineinfile:
+    path: "/etc/hosts"
+    search_string: ovpn.gcp
+    line: "{{ lookup('file', '../../../../opentofu/ovpn/output/ovpnci_external_ip.txt') }} ovpn.gcp"
+    state: present
+    create: yes
+
+- name: ovpn.service zerbitzua berrabiarazi
+  ansible.builtin.systemd_service:
+    name: ovpn
+    state: restarted

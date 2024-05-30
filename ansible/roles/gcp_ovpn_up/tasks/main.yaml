@@ -1,0 +1,51 @@
+- name: Google Cloud Platform-eko instantzia hasi
+  ansible.builtin.command:
+    cmd: gcloud compute instances start "{{ gcp_ovpnci_name }}"
+  ignore_errors: true
+  delegate_to: 127.0.0.1
+
+- name: Google Cloud Platform-eko ovpn instantziaren IP externoa
+  ansible.builtin.command:
+    cmd: gcloud compute instances describe "{{ gcp_ovpnci_name }}" --format='get(networkInterfaces[0].accessConfigs[0].natIP)'
+  register: ovpnciexternalip
+  ignore_errors: true
+  delegate_to: 127.0.0.1
+
+- name: Google Cloud Platform-eko ovpn instantziaren IP-a fitxategian gorde
+  ansible.builtin.copy:
+    content: "{{ ovpnciexternalip.stdout }}" 
+    dest: ../opentofu/ovpn/output/ovpnci_external_ip.txt
+  when: ovpnciexternalip is changed
+  delegate_to: 127.0.0.1
+
+- name: Google Cloud Platform-eko ovpn instantziaren IP internoa
+  ansible.builtin.command:
+    cmd: gcloud compute instances describe "{{ gcp_ovpnci_name }}" --format='get(networkInterfaces[0].networkIP)'
+  register: ovpnciinternalip
+  ignore_errors: true
+  delegate_to: 127.0.0.1
+
+- name: Google Cloud Platform-eko ovpn instantziaren IP-a fitxategian gorde
+  ansible.builtin.copy:
+    content: "{{ ovpnciinternalip.stdout }}" 
+    dest: ../opentofu/ovpn/output/ovpnci_internal_ip.txt
+  when: ovpnciinternalip is changed
+  delegate_to: 127.0.0.1
+
+- name: IP helbide publikoa lortu
+  community.general.ipify_facts:
+  register: ip_publikoa
+  delegate_to: 127.0.0.1
+
+- name: Google Cloud Platform-en sareko aldaketak burutu
+  ansible.builtin.command:
+    cmd: "{{ item }}" 
+  loop:
+    - "gcloud beta compute routes delete {{ gcp_route_ovpn }} --quiet"
+    - "gcloud beta compute routes delete {{ gcp_route_pm }} --quiet"
+    - "gcloud compute --project={{ gcp_proiektua }} firewall-rules delete {{ gcp_firewall_erregela_izena_tcp443 }} --quiet"
+    - "gcloud beta compute routes create {{ gcp_route_ovpn }} --project={{ gcp_proiektua }} --network={{ gcp_sarea }} --priority=1000 --destination-range={{ ovpn_sarea }} --next-hop-address={{ lookup('file', '../../../../opentofu/ovpn/output/ovpnci_internal_ip.txt') }}"
+    - "gcloud beta compute routes create {{ gcp_route_pm }} --project={{ gcp_proiektua }} --network={{ gcp_sarea }} --priority=1000 --destination-range={{ pm_sarea }} --next-hop-address={{ lookup('file', '../../../../opentofu/ovpn/output/ovpnci_internal_ip.txt') }}"
+    - "gcloud compute --project={{ gcp_proiektua }} firewall-rules create {{ gcp_firewall_erregela_izena_tcp443 }} --direction=INGRESS --priority=1000 --network={{ gcp_sarea }} --action=ALLOW --rules={{ gcp_firewall_erregela_tcp443 }} --source-ranges={{ ip_publikoa.ansible_facts.ipify_public_ip }}/32"
+  ignore_errors: true
+  delegate_to: 127.0.0.1

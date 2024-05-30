@@ -1,0 +1,22 @@
+---
+
+- name: Google Cloud Platform-eko instantzia hasi
+  hosts: localhost
+  roles:
+  - gcp_ovpn_up
+
+- name: Proxmox-eko CT-a hasi
+  hosts: pve1
+  remote_user: root
+  become: no
+  gather_facts: no
+  roles:
+  - pm_ct_up
+
+- name: ovpnclient konfiguratu
+  hosts: ovpn
+  remote_user: root
+  become: no
+  gather_facts: no
+  roles:
+  - pm_ovpn_up

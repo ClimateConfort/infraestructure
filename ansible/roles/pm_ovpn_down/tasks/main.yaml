@@ -1,0 +1,7 @@
+- name: ovpnclient ct-a itzali
+  community.general.proxmox:
+    vmid: "{{ lookup('file', '../../../../opentofu/ovpn/output/ovpnsc_id.txt').split('/')[-1] }}"
+    api_user: "{{ pm_api_user }}"
+    api_password: "{{ pm_api_password }}"
+    api_host: "{{ pm_api_host }}"
+    state: stopped

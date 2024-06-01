@@ -1,0 +1,13 @@
+- name: Check if Docker is installed
+  command: docker --version
+  register: docker_version
+  failed_when: docker_version.rc != 0
+
+- name: Check if Swarm is already initialized
+  shell: "docker info | grep 'Swarm: active'"
+  register: swarm_status
+  ignore_errors: yes
+
+- name: Create the docker overlay network
+  shell: docker network create --opt encrypted --driver overlay --attachable private-cloud
+  when: swarm_status.rc == 0

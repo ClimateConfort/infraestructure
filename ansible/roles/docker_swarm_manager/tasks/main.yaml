@@ -1,0 +1,24 @@
+- name: Check if Docker is installed
+  command: docker --version
+  register: docker_version
+  failed_when: docker_version.rc != 0
+
+- name: Check if Swarm is already initialized
+  shell: "docker info | grep 'Swarm: active'"
+  register: swarm_status
+  ignore_errors: yes
+
+- name: Initialize Docker Swarm
+  shell: docker swarm init --advertise-addr {{ ansible_default_ipv4.address }}
+  register: swarm_init
+  when: swarm_status.rc != 0
+
+- name: Get Swarm join token
+  shell: docker swarm join-token -q worker
+  when: swarm_init.changed or swarm_status.rc == 0
+  register: swarm_join_token
+
+- name: Save Swarm join token on control machine
+  local_action: copy content="{{ swarm_join_token.stdout }}" dest="./roles/docker_swarm_workers/files/swarm_join_token_{{ inventory_hostname }}"
+  when: swarm_init.changed or swarm_status.rc == 0
+  delegate_to: localhost

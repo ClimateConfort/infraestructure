@@ -1,0 +1,13 @@
+---
+- name: Docker Swarm Managers Setup
+  hosts: master
+  remote_user: root
+  roles:
+  - docker_swarm_manager
+  - docker_swarm_overlay_network
+
+- name: Docker Swarm Workers Setup
+  hosts: worker
+  remote_user: root
+  roles:
+  - docker_swarm_workers

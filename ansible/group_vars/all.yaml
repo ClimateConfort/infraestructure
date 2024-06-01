@@ -36,6 +36,19 @@ pm_node:
     ssh_private_key: ../../credentials/ssh-keys/pmpve3
 pm_sarea: 10.0.2.0/24
 
+
+# Proxmox LXC-en aldagaiak
+pm_lxc:
+  - hostname: lxc1
+    ip: 10.0.2.3
+    ssh_private_key: ../../credentials/ssh-keys/lxc1
+  - hostname: lxc2
+    ip: 10.0.2.4
+    ssh_private_key: ../../credentials/ssh-keys/lxc2
+  - hostname: lxc3
+    ip: 10.0.2.5
+    ssh_private_key: ../../credentials/ssh-keys/lxc3
+
 # Proxmox-eko vm-en aldagaiak
 pm_ct_template_storage: local
 pm_ct_template_type: vztmpl

@@ -1,0 +1,12 @@
+---
+- name: Docker Registry Configure Clients
+  hosts: all
+  remote_user: root
+  roles:
+  - configure-registry-clients
+
+- name: Docker Registry create
+  hosts: master
+  remote_user: root
+  roles:
+  - create-registry

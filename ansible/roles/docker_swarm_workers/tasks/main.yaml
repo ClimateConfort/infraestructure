@@ -1,0 +1,19 @@
+- name: Check if Docker is installed
+  command: docker --version
+  register: docker_version
+  failed_when: docker_version.rc != 0
+
+- name: Swarm join token fitxategia helburuko makinara pasa
+  ansible.builtin.copy:
+    src: "swarm_join_token_{{ groups['master'][0] }}"
+    dest: "/tmp/swarm_join_token"
+    owner: "root"
+    group: "root"
+
+- name: Read Swarm join token
+  command: cat /tmp/swarm_join_token
+  register: swarm_join_token
+
+- name: Join the Docker Swarm cluster
+  shell: "docker swarm join --token {{ swarm_join_token.stdout }} {{ hostvars[groups['master'][0]].ansible_default_ipv4.address }}:2377"
+  when: swarm_join_token is defined

@@ -1,0 +1,29 @@
+---
+- name: Copy configs
+  copy:
+    src: "../files/configuration"
+    dest: "/root"
+    directory_mode: yes
+- name: Copy certs
+  copy:
+    src: "../files/certificates"
+    dest: "/root"
+    directory_mode: yes
+- name: Create a Docker container
+  docker_container:
+    name: registry.datuen-ingenieritza.local
+    image: registry:2.8.3
+    state: started
+    hostname: "registry.datuen-ingenieritza.local"
+    networks:
+      - name: "private-cloud"
+    ports:
+      - "5000:5000"
+    detach: true
+    mounts:
+      - type: "bind"
+        source: "/root/configuration/config.yaml"
+        target: "/etc/docker/registry/config.yml"
+    volumes:
+      - "/root/certificates:/etc/docker/registry/certificates"
+      - "/root/contents:/var/lib/registry"

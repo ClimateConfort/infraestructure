@@ -58,6 +58,17 @@ resource "proxmox_lxc" "ct" {
 
   provisioner "local-exec" {
     command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -e 'ansible_ssh_private_key_file=../../credentials/ssh-keys/lxc${count.index + 1}' -i ${cidrhost(var.pm_ct_network_subnet, count.index + 3)}, ../../ansible/docker_install.yaml"
-  } 
+  }
+}
 
+
+resource "null_resource" "docker-swarm" {
+
+  depends_on = [
+    proxmox_lxc.ct
+  ]
+  
+  provisioner "local-exec" {
+    command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ../../ansible/docker_swarm_inventory.yaml ../../ansible/docker_swarm_setup.yaml"
+  }
 }

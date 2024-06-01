@@ -72,3 +72,14 @@ resource "null_resource" "docker-swarm" {
     command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ../../ansible/docker_swarm_inventory.yaml ../../ansible/docker_swarm_setup.yaml"
   }
 }
+
+resource "null_resource" "docker-registry" {
+
+  depends_on = [
+    null_resource.docker-swarm
+  ]
+  
+  provisioner "local-exec" {
+    command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ../../ansible/docker_swarm_inventory.yaml ../../ansible/docker_registry_setup.yaml"
+  }
+}

@@ -1,22 +1,22 @@
 ---
 - name: Create docker client certificate folder
   file:
-    path: "/etc/docker/certs.d/registry.datuen-ingenieritza.local:5000"
+    path: "/etc/docker/certs.d/{{ registry_domain }}:{{ registry_port }}"
     state: "directory"
 - name: Copy ca.crt
   copy:
     src: "../files/certificates/ca.crt"
-    dest: "/etc/docker/certs.d/registry.datuen-ingenieritza.local:5000"
+    dest: "/etc/docker/certs.d/{{ registry_domain }}:{{ registry_port }}"
 - name: Copy client.cert
   copy:
     src: "../files/certificates/client.cert"
-    dest: "/etc/docker/certs.d/registry.datuen-ingenieritza.local:5000"
+    dest: "/etc/docker/certs.d/{{ registry_domain }}:{{ registry_port }}"
 - name: Copy client.key
   copy:
     src: "../files/certificates/client.key"
-    dest: "/etc/docker/certs.d/registry.datuen-ingenieritza.local:5000"
+    dest: "/etc/docker/certs.d/{{ registry_domain }}:{{ registry_port }}"
 - name: Add necessary route on /etc/hosts
-  shell: "echo \"{{ hostvars[groups['master'][0]].ansible_default_ipv4.address }} registry.datuen-ingenieritza.local\" >> /etc/hosts"
+  shell: "echo \"{{ hostvars[groups['master'][0]].ansible_default_ipv4.address }} {{ registry_domain }}\" >> /etc/hosts"
 # - name: Copy daemon.json
 #   copy:
 #     src: "../files/daemon.json"

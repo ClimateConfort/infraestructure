@@ -1,5 +1,6 @@
 all:
   children:
+# master bakarra!!
     master:
       hosts:
         lxc1:

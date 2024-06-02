@@ -83,3 +83,14 @@ resource "null_resource" "docker-registry" {
     command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ../../ansible/docker_swarm_inventory.yaml ../../ansible/docker_registry_setup.yaml"
   }
 }
+
+resource "null_resource" "docker-build-push" {
+
+  depends_on = [
+    null_resource.docker-registry
+  ]
+  
+  provisioner "local-exec" {
+    command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -e 'ansible_ssh_private_key_file=../../credentials/ssh-keys/lxc${var.pm_ct_master_id}' -i ${var.pm_ct_master}, ../../ansible/docker_build_push_images.yaml"
+  }
+}

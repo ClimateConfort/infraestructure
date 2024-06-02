@@ -1,0 +1,36 @@
+- name: Get list of directories in files
+  ansible.builtin.find:
+    paths: ./roles/docker_build_push_images/files
+    file_type: directory
+    depth: 1
+  register: directories
+  delegate_to: localhost
+  
+- name: Copy each directory
+  copy:
+    src: "{{ item.path }}"
+    dest: "/root"
+  with_items: "{{ directories.files }}"
+
+- name: Build an image and push it to a private repo
+  community.docker.docker_image:
+    build:
+      path: /root/{{ item.path | basename }}
+    name: "{{ registry_domain }}:{{ registry_port }}/{{ item.path | basename }}"
+    tag: latest
+    push: true
+    source: build
+  with_items: "{{ directories.files }}"
+
+- name: Remove images from LXC
+  community.docker.docker_image:
+    state: absent
+    name: "{{ registry_domain }}:{{ registry_port }}/{{ item.path | basename }}"
+    tag: latest
+  with_items: "{{ directories.files }}"
+
+- name: Remove copied directories
+  file:
+    path: "/root/{{ item.path | basename }}"
+    state: absent
+  with_items: "{{ directories.files }}"

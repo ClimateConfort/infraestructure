@@ -11,14 +11,14 @@
     directory_mode: yes
 - name: Create a Docker container
   docker_container:
-    name: registry.datuen-ingenieritza.local
+    name: "{{ registry_domain }}"
     image: registry:2.8.3
     state: started
-    hostname: "registry.datuen-ingenieritza.local"
+    hostname: "{{ registry_domain }}"
     networks:
       - name: "private-cloud"
     ports:
-      - "5000:5000"
+      - "{{ registry_port }}:{{ registry_port }}"
     detach: true
     mounts:
       - type: "bind"

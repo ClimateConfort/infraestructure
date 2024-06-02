@@ -37,6 +37,11 @@ pm_node:
 pm_sarea: 10.0.2.0/24
 
 
+# Docker registry-aren aldagaiak
+registry_domain: registry.datuen-ingenieritza.local
+registry_port: 5000
+
+
 # Proxmox LXC-en aldagaiak
 pm_lxc:
   - hostname: lxc1

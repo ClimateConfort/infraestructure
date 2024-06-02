@@ -90,3 +90,13 @@ variable "pm_ct_network_gw" {
   description = "LXC gateway IP address"
   type        = string
 }
+
+variable "pm_ct_master" {
+  description = "Master LXC's IP (swarm manager, registry located here...)"
+  type        = string
+}
+
+variable "pm_ct_master_id" {
+  description = "Master LXC's id (swarm manager, registry located here...)"
+  type        = string
+}

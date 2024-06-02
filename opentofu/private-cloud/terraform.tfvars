@@ -7,9 +7,9 @@ pm_password = "rootroot"
 pm_user     = "root@pam"
 pm_nodes    = ["pve1", "pve2", "pve3"]
 
-###################################
-# ovpn system container variables #
-###################################
+##################################
+# pm system containers variables #
+##################################
 pm_ct_target_node    = "pve1"
 pm_ct_ostemplate     = "local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst"
 pm_ct_cores          = "1"
@@ -22,3 +22,5 @@ pm_ct_network_bridge = "vmbr0"
 pm_ct_network_mask   = "24"
 pm_ct_network_subnet = "10.0.2.0/24"
 pm_ct_network_gw     = "10.0.2.2"
+pm_ct_master         = "10.0.2.3"
+pm_ct_master_id      = "1"

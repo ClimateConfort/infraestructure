@@ -1,0 +1,18 @@
+---
+- name: Pull kafka image on all the nodes
+  hosts: brokers
+  remote_user: root
+  roles:
+    - kafka_pull_image
+
+- name: Setup Zookeeper and Kafka Cluster
+  hosts: zookeeper
+  remote_user: root
+  roles:
+    - kafka_cluster_zookeeper
+
+- name: Setup Kafka Brokers
+  hosts: brokers
+  remote_user: root
+  roles:
+    - kafka_cluster_brokers

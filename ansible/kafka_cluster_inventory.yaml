@@ -1,0 +1,18 @@
+all:
+  children:
+    zookeeper:
+      hosts:
+        lxc1:
+          ansible_host: "{{ pm_lxc[0]['ip'] }}"
+          ansible_private_key_file: "{{ pm_lxc[0]['ssh_private_key'] }}"
+    brokers:
+      hosts:
+        lxc1:
+          ansible_host: "{{ pm_lxc[0]['ip'] }}"
+          ansible_private_key_file: "{{ pm_lxc[0]['ssh_private_key'] }}"
+        lxc2:
+          ansible_host: "{{ pm_lxc[1]['ip'] }}"
+          ansible_private_key_file: "{{ pm_lxc[1]['ssh_private_key'] }}"
+        lxc3:
+          ansible_host: "{{ pm_lxc[2]['ip'] }}"
+          ansible_private_key_file: "{{ pm_lxc[2]['ssh_private_key'] }}"

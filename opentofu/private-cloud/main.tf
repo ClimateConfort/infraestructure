@@ -94,3 +94,15 @@ resource "null_resource" "docker-build-push" {
     command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -e 'ansible_ssh_private_key_file=../../credentials/ssh-keys/lxc${var.pm_ct_master_id}' -i ${var.pm_ct_master}, ../../ansible/docker_build_push_images.yaml"
   }
 }
+
+
+resource "null_resource" "kafka-cluster" {
+
+  depends_on = [
+    null_resource.docker-build-push
+  ]
+  
+  provisioner "local-exec" {
+    command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ../../ansible/kafka_cluster_inventory.yaml ../../ansible/kafka_cluster_deploy.yaml"
+  }
+}

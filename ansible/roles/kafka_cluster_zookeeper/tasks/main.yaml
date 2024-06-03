@@ -1,0 +1,12 @@
+- name: Start Zookeeper container
+  docker_container:
+    name: zookeeper
+    image: "{{ registry_domain }}:{{ registry_port }}/kafka:latest"
+    command: ./run_start_zookeeper.sh
+    ports:
+      - "2181:2181"
+    env:
+      ZOOKEEPER_HOST: "zookeeper"
+    networks:
+      - name: private-cloud
+  when: inventory_hostname in groups['zookeeper']

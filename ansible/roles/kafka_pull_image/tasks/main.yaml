@@ -1,0 +1,4 @@
+- name: Pull kafka image
+  community.docker.docker_image:
+    name: "{{ registry_domain }}:{{ registry_port }}/kafka:latest"
+    source: pull

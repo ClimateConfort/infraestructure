@@ -1,0 +1,21 @@
+- name: Pull hadoop base image
+  community.docker.docker_image:
+    name: "{{ registry_domain }}:{{ registry_port }}/hadoop1-master:latest"
+    source: pull
+
+- name: Create hadoop data directory
+  ansible.builtin.file:
+    path: /root/hadoop-data
+    state: directory
+  register: hadoop_data_dir
+
+- name: Start Hadoop slaves
+  shell: |
+    docker run -itd \
+        --net=private-cloud \
+        -p 50070:50070 \
+        -p 8088:8088 \
+        --name hadoop-master \
+        --hostname hadoop-master \
+        -v {{ hadoop_data_dir.path }}:/data \
+        {{ registry_domain }}:{{ registry_port }}/hadoop1-master:latest

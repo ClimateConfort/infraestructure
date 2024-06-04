@@ -106,3 +106,15 @@ resource "null_resource" "kafka-cluster" {
     command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ../../ansible/kafka_cluster_inventory.yaml ../../ansible/kafka_cluster_deploy.yaml"
   }
 }
+
+
+resource "null_resource" "hadoop-cluster" {
+
+  depends_on = [
+    null_resource.kafka-cluster
+  ]
+  
+  provisioner "local-exec" {
+    command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ../../ansible/hadoop_cluster_inventory.yaml ../../ansible/hadoop_cluster_deploy.yaml"
+  }
+}

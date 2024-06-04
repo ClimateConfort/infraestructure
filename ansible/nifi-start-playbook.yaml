@@ -3,5 +3,5 @@
   hosts: all
   remote_user: user
   roles:
-  - nifi-config-file-copy
+  - zookeeper-start
   - nifi-start

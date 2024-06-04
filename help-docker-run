@@ -3,3 +3,91 @@
 docker run -d --name nifi -h nifi -p 8080:8080 -p 8443:8443 -e NIFI_CLUSTER_NODE_ADDRESS=node1.c.pbl6-422712.internal -v nifi.properties:/opt/nifi/nifi-current/conf/nifi.properties apache/nifi:latest
 
 #cambiar el puerto 8080,8081,8082 de la vm
+sudo docker run --name nifi -h nifi -p 8080:8080 -p 8443:8443 -d apache/nifi
+sudo docker cp -a /etc/nifi/nifi.properties nifi:/opt/nifi/nifi-current/conf/nifi.properties
+sudo docker cp -a /etc/nifi/zookeeper.properties nifi:/opt/nifi/nifi-current/conf/zookeeper.properties
+sudo docker cp -a /etc/nifi/state-management.xml nifi:/opt/nifi/nifi-current/conf/state-management.xml
+sudo docker cp -a /etc/nifi/zookeeper/myid nifi:/opt/nifi/nifi-current/state/zookeeper/myid
+
+sudo docker stop nifi
+sudo docker start nifi
+
+nifi.cluster.is.node=true 
+nifi.cluster.node.address=node1.c.pbl6-422712.internal
+nifi.cluster.node.protocol.port=9999
+
+nifi.web.http.host=node1.c.pbl6-422712.internal
+nifi.web.http.port=8080
+nifi.web.http.network.interface.default=
+
+#############################################
+
+nifi.web.https.host=
+nifi.web.https.port=
+nifi.web.https.network.interface.default=
+
+nifi.zookeeper.connect.string=node1.c.pbl6-422712.internal:4881,node2.c.pbl6-422712.internal:4881,node3.c.pbl6-422712.internal:4881
+
+sudo docker run -d --name nifi1 \
+  -e NIFI_CLUSTER_IS_NODE=true \
+  -e NIFI_CLUSTER_NODE_ADDRESS=node1.c.pbl6-422712.internal \
+  -e NIFI_CLUSTER_NODE_PROTOCOL_PORT=9999 \
+  -e NIFI_ZK_CONNECT_STRING=node1.c.pbl6-422712.internal:2181,node2.c.pbl6-422712.internal:2181,node3.c.pbl6-422712.internal:2181 \
+  -e NIFI_ZK_ROOT_NODE=/nifi \
+  -e NIFI_ELECTION_MAX_WAIT='1 min' \
+  -e NIFI_ELECTION_MAX_CANDIDATES=3 \
+  -p 8080:8080 -p 8443:8443 -p 10000:10000 -p 9999:9999 \
+  -v /etc/nifi/nifi.properties:/opt/nifi/nifi-current/conf/nifi.properties \
+  -v /etc/nifi/state-management.xml:/opt/nifi/nifi-current/conf/state-management.xml \
+  -v /etc/nifi/zookeeper.properties:/opt/nifi/nifi-current/conf/zookeeper.properties \
+  -v /etc/nifi/zookeeper/myid:/opt/nifi/nifi-current/state/zookeeper/myid \
+  apache/nifi:latest
+
+sudo docker run -d --name nifi2 \
+  -e NIFI_CLUSTER_IS_NODE=true \
+  -e NIFI_CLUSTER_NODE_ADDRESS=node2.c.pbl6-422712.internal \
+  -e NIFI_CLUSTER_NODE_PROTOCOL_PORT=9999 \
+  -e NIFI_ZK_CONNECT_STRING=node1.c.pbl6-422712.internal:2181,node2.c.pbl6-422712.internal:2181,node3.c.pbl6-422712.internal:2181 \
+  -e NIFI_ZK_ROOT_NODE=/nifi \
+  -e NIFI_ELECTION_MAX_WAIT='1 min' \
+  -e NIFI_ELECTION_MAX_CANDIDATES=3 \
+  -p 8080:8080 -p 8443:8443 -p 10000:10000 -p 9999:9999 \
+  -v /etc/nifi/nifi.properties:/opt/nifi/nifi-current/conf/nifi.properties \
+  -v /etc/nifi/state-management.xml:/opt/nifi/nifi-current/conf/state-management.xml \
+  -v /etc/nifi/zookeeper.properties:/opt/nifi/nifi-current/conf/zookeeper.properties \
+  -v /etc/nifi/zookeeper/myid:/opt/nifi/nifi-current/state/zookeeper/myid \
+  apache/nifi:latest
+
+sudo docker run -d --name nifi3 \
+  -e NIFI_CLUSTER_IS_NODE=true \
+  -e NIFI_CLUSTER_NODE_ADDRESS=node3.c.pbl6-422712.internal \
+  -e NIFI_CLUSTER_NODE_PROTOCOL_PORT=9999 \
+  -e NIFI_ZK_CONNECT_STRING=node1.c.pbl6-422712.internal:2181,node2.c.pbl6-422712.internal:2181,node3.c.pbl6-422712.internal:2181 \
+  -e NIFI_ZK_ROOT_NODE=/nifi \
+  -e NIFI_ELECTION_MAX_WAIT='1 min' \
+  -e NIFI_ELECTION_MAX_CANDIDATES=3 \
+  -p 8080:8080 -p 8443:8443 -p 10000:10000 -p 9999:9999 \
+  -v /etc/nifi/nifi.properties:/opt/nifi/nifi-current/conf/nifi.properties \
+  -v /etc/nifi/state-management.xml:/opt/nifi/nifi-current/conf/state-management.xml \
+  -v /etc/nifi/zookeeper.properties:/opt/nifi/nifi-current/conf/zookeeper.properties \
+  -v /etc/nifi/zookeeper/myid:/opt/nifi/nifi-current/state/zookeeper/myid \
+  apache/nifi:latest
+
+sudo docker run -d --name nifi3 \
+  -e NIFI_CLUSTER_IS_NODE=true \
+  -e NIFI_CLUSTER_NODE_ADDRESS=node3.c.pbl6-422712.internal \
+  -e NIFI_CLUSTER_NODE_PROTOCOL_PORT=9999 \
+  -e NIFI_ZK_CONNECT_STRING=node1.c.pbl6-422712.internal:2181,node2.c.pbl6-422712.internal:2181,node3.c.pbl6-422712.internal:2181 \
+  -e NIFI_ZK_ROOT_NODE=/nifi \
+  -e 
+  -p 8080:8080 -p 8443:8443 -p 10000:10000 -p 9999:9999 \
+  apache/nifi:latest
+
+sudo docker run -d --name zookeeper --network host -e ZOO_MY_ID="1" -e ZOO_SERVERS="server.1=node1.c.pbl6-422712.internal:2888:3888;2181 server.2=node2.c.pbl6-422712.internal:2888:3888;2181 server.3=node3.c.pbl6-422712.internal:2888:3888;2181" zookeeper
+sudo docker run -d --name zookeeper --network host -e ZOO_MY_ID="2" -e ZOO_SERVERS="server.1=node1.c.pbl6-422712.internal:2888:3888;2181 server.2=node2.c.pbl6-422712.internal:2888:3888;2181 server.3=node3.c.pbl6-422712.internal:2888:3888;2181" zookeeper
+sudo docker run -d --name zookeeper --network host -e ZOO_MY_ID="3" -e ZOO_SERVERS="server.1=node1.c.pbl6-422712.internal:2888:3888;2181 server.2=node2.c.pbl6-422712.internal:2888:3888;2181 server.3=node3.c.pbl6-422712.internal:2888:3888;2181" zookeeper
+
+
+sudo docker run --name nifi -p 8080:8080 -p 3881:3881 -p 4881:4881 -p 2881:2881 -p 10000:10000 -p 9999:9999 -p 6342:6342 --user root -e NIFI_WEB_HTTP_PORT='8080' -e SINGLE_USER_CREDENTIALS_USERNAME='admin' -e SINGLE_USER_CREDENTIALS_PASSWORD='adminadminadmin' -e NIFI_CLUSTER_IS_NODE='true' -e NIFI_ZK_CONNECT_STRING='node1.c.pbl6-422712.internal:4881,node2.c.pbl6-422712.internal:4881,node3.c.pbl6-422712.internal:4881' -e NIFI_SENSITIVE_PROPS_KEY='somosloboyloba' -e NIFI_CLUSTER_NODE_PROTOCOL_PORT='9999' -v /home/user/zookeeper.properties:/opt/nifi/nifi-current/conf/zookeeper.properties -v /home/user/myid:/opt/nifi/nifi-current/state/zookeeper/myid -d apache/nifi:latest
+
+sudo docker run --name nifi --network host --user root -e NIFI_WEB_HTTP_PORT='8088' -e SINGLE_USER_CREDENTIALS_USERNAME='admin' -e SINGLE_USER_CREDENTIALS_PASSWORD='adminadminadmin' -e NIFI_CLUSTER_IS_NODE='true' -e NIFI_ZK_CONNECT_STRING='node1.c.pbl6-422712.internal:2181,node2.c.pbl6-422712.internal:2181,node3.c.pbl6-422712.internal:2181' -e NIFI_SENSITIVE_PROPS_KEY='somosloboyloba' -e NIFI_CLUSTER_NODE_PROTOCOL_PORT='9999' -d apache/nifi:latest

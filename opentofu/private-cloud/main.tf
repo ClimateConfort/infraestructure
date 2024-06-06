@@ -140,3 +140,15 @@ resource "null_resource" "hadoop-cluster" {
     command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ../../ansible/hadoop_cluster_inventory.yaml ../../ansible/hadoop_cluster_deploy.yaml"
   }
 }
+
+
+resource "null_resource" "client_container" {
+
+  depends_on = [
+    null_resource.hadoop-cluster
+  ]
+  
+  provisioner "local-exec" {
+    command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -e 'ansible_ssh_private_key_file=../../credentials/ssh-keys/lxc${var.pm_client_ct_id}' -i ${var.pm_client_ct_ip}, ../../ansible/client_setup.yaml"
+  }
+}

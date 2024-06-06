@@ -1,0 +1,15 @@
+- name: Pull client image
+  community.docker.docker_image:
+    name: "{{ registry_domain }}:{{ registry_port }}/client:latest"
+    source: pull
+
+- name: Start client container
+  shell: |
+    docker run -itd \
+        --net=private-cloud \
+        -p 10004:22 \
+        -p 5672:5672 \
+        -p 15672:15672 \
+        --name private-cloud-client \
+        --hostname private-cloud-client \
+        {{ registry_domain }}:{{ registry_port }}/client:latest

@@ -104,8 +104,21 @@ variable "pm_ct_master_id" {
 ###################################
 # ovpn system container variables #
 ###################################
-
 variable "pm_master_ovpn_client_ip" {
   description = "Master pve node IP for ovpn client"
+  type        = string
+}
+
+
+############################
+# Proxmox client container #
+############################
+variable "pm_client_ct_ip" {
+  description = "IP of the LXC receiving the client container's IP"
+  type        = string
+}
+
+variable "pm_client_ct_id" {
+  description = "IP of the LXC receiving the client container's ID"
   type        = string
 }

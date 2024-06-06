@@ -28,5 +28,11 @@ pm_ct_master_id      = "1"
 #######################
 # Proxmox ovpn client #
 #######################
-
 pm_master_ovpn_client_ip = "10.0.2.17"
+
+
+############################
+# Proxmox client container #
+############################
+pm_client_ct_ip = "10.0.2.5"
+pm_client_ct_id = "3"

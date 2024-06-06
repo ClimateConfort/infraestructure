@@ -61,11 +61,33 @@ resource "proxmox_lxc" "ct" {
   }
 }
 
+resource "null_resource" "save-ct-id" {
+
+  depends_on = [
+    proxmox_lxc.ct
+  ]
+
+  provisioner "local-exec" {
+    command = "echo '${proxmox_lxc.ct[1].id}' > ../ovpn/output/ovpnsc_id.txt"
+  }
+
+}
+
+resource "null_resource" "pm_ct_setup" {
+
+  depends_on = [
+    null_resource.save-ct-id
+  ]
+
+  provisioner "local-exec" {
+    command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -e 'vmid=${proxmox_lxc.ct[1].id}' -e 'ansible_ssh_private_key_file=../../credentials/ssh-keys/pmpve2' -i ${var.pm_master_ovpn_client_ip}, ../../ansible/pm_ct_setup.yaml"
+  }
+}
 
 resource "null_resource" "docker-swarm" {
 
   depends_on = [
-    proxmox_lxc.ct
+    null_resource.pm_ct_setup
   ]
   
   provisioner "local-exec" {

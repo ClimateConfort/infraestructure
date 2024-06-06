@@ -21,7 +21,7 @@ gcp_firewall_erregela_tcp443: 'tcp:443'
 
 pm_api_user: root@pam
 pm_api_password: rootroot
-pm_api_host: 10.0.2.16
+pm_api_host: 10.0.2.17
 
 # Proxmox node-en aldagaiak
 pm_node:
@@ -70,6 +70,6 @@ pm_ct_kernel_config:
 # OpenVPN #
 ###########
 
-ovpn_ct_ssh_private_key: ../../credentials/ssh-keys/ovpn-pm
+ovpn_ct_ssh_private_key: ../../credentials/ssh-keys/lxc2
 ovpn_sarea: 10.8.0.0/24
-ovpn_bezeroa: 10.0.2.8
+ovpn_bezeroa: 10.0.2.4

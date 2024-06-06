@@ -142,106 +142,24 @@ resource "null_resource" "ovpn_firewall" {
 
 }
 
-
-resource "null_resource" "pm_ct_template" {
-
-  depends_on = [
-    null_resource.ovpn_route
-  ]
-
-  provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -e 'ansible_ssh_private_key_file=../../credentials/ssh-keys/pmpve1' -i ${var.pm_master_ip}, ../../ansible/pm_ct_template.yaml"
-  }
-}
-
-resource "proxmox_lxc" "ovpnsc" {
-
-  depends_on = [
-    null_resource.pm_ct_template
-  ]
-
-  target_node  = var.pm_ovpnsc_target_node
-  ostemplate   = var.pm_ovpnsc_ostemplate
-  cores        = var.pm_ovpnsc_cores
-  memory       = var.pm_ovpnsc_memory_mb
-  hostname     = var.pm_ovpnsc_hostname
-  password     = var.pm_ovpnsc_password
-  unprivileged = true
-  start        = true
-
-  ssh_public_keys = file("${path.module}/../../credentials/ssh-keys/ovpn-pm.pub")
-
-  rootfs {
-    storage = "local-lvm"
-    size    = var.pm_ovpnsc_rootfs_size_gb
-  }
-
-  network {
-    name   = var.pm_ovpnsc_network_name
-    bridge = var.pm_ovpnsc_network_bridge
-    ip     = "${var.pm_ovpnsc_network_ip}/${var.pm_ovpnsc_network_mask}"
-    gw     = var.pm_ovpnsc_network_gw
-  }
-
-  features {
-    nesting = false
-  }
-
-}
-
-resource "null_resource" "ovpnsc_id" {
-
-  depends_on = [
-    proxmox_lxc.ovpnsc
-  ]
-
-  provisioner "local-exec" {
-    command = "echo '${proxmox_lxc.ovpnsc.id}' > output/ovpnsc_id.txt"
-  }
-
-}
-
-
-resource "null_resource" "pm_ct_setup" {
-
-  depends_on = [
-    null_resource.ovpnsc_id
-  ]
-
-  provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -e 'vmid=${proxmox_lxc.ovpnsc.id}' -e 'ansible_ssh_private_key_file=../../credentials/ssh-keys/pmpve1' -i ${var.pm_master_ip}, ../../ansible/pm_ct_setup.yaml"
-  }
-}
-
 resource "null_resource" "ovpn" {
 
   depends_on = [
-    null_resource.pm_ct_setup
+    null_resource.ovpn_firewall
   ]
 
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../../ansible/ansible_ovpnpm.cfg ansible-playbook -e 'ovpnciip=${google_compute_instance.ovpnci.network_interface.0.access_config.0.nat_ip}' -e 'ansible_ssh_private_key_file=../../credentials/ssh-keys/ovpn-pm' -i ${var.pm_ovpnsc_network_ip}, ../../ansible/pm_ovpn_setup.yaml"
+    command = "ANSIBLE_CONFIG=../../ansible/ansible_ovpnpm.cfg ansible-playbook -e 'ovpnciip=${google_compute_instance.ovpnci.network_interface.0.access_config.0.nat_ip}' -e 'ansible_ssh_private_key_file=../../credentials/ssh-keys/lxc2' -i ${var.pm_ovpnsc_network_ip}, ../../ansible/pm_ovpn_setup.yaml"
   }
 }
 
-resource "null_resource" "ovpn_down" {
+resource "null_resource" "ovpn_restart" {
 
   depends_on = [
     null_resource.ovpn
   ]
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i ../../ansible/ovpn_inventory.yaml ../../ansible/ovpn_down.yaml"
-  }
-}
-
-resource "null_resource" "ovpn_up" {
-
-  depends_on = [
-    null_resource.ovpn_down
-  ]
-
-  provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../../ansible/ansible_ovpnpm.cfg ansible-playbook -i ../../ansible/ovpn_inventory.yaml ../../ansible/ovpn_up.yaml"
+    command = "ANSIBLE_CONFIG=../../ansible/ansible_ovpnpm.cfg ansible-playbook -e 'ovpnciip=${google_compute_instance.ovpnci.network_interface.0.access_config.0.nat_ip}' -i ../../ansible/ovpn_inventory.yaml ../../ansible/ovpn_restart.yaml"
   }
 }

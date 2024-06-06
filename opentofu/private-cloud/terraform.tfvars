@@ -24,3 +24,9 @@ pm_ct_network_subnet = "10.0.2.0/24"
 pm_ct_network_gw     = "10.0.2.2"
 pm_ct_master         = "10.0.2.3"
 pm_ct_master_id      = "1"
+
+#######################
+# Proxmox ovpn client #
+#######################
+
+pm_master_ovpn_client_ip = "10.0.2.17"

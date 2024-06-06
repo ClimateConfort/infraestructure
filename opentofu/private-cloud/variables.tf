@@ -100,3 +100,12 @@ variable "pm_ct_master_id" {
   description = "Master LXC's id (swarm manager, registry located here...)"
   type        = string
 }
+
+###################################
+# ovpn system container variables #
+###################################
+
+variable "pm_master_ovpn_client_ip" {
+  description = "Master pve node IP for ovpn client"
+  type        = string
+}

@@ -1,0 +1,19 @@
+---
+
+- name: Google Cloud Platform-eko instantzia itzali
+  hosts: localhost
+  roles:
+  - gcp_ovpn_down
+
+- name: Google Cloud Platform-eko instantzia hasi
+  hosts: localhost
+  roles:
+  - gcp_ovpn_up
+
+- name: ovpnclient berrabiarazi
+  hosts: ovpn
+  remote_user: root
+  become: no
+  gather_facts: no
+  roles:
+  - pm_ovpn_up

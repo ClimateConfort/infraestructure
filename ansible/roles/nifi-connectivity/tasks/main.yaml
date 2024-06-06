@@ -1,0 +1,3 @@
+- name: Append ovpnserver to /etc/hosts
+  become: yes
+  shell: echo "10.8.0.2 ovpnserver.c.pbl6-422712.internal" >> /etc/hosts

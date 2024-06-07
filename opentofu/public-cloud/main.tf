@@ -66,6 +66,7 @@ resource "google_compute_instance" "node" {
 
   provisioner "local-exec" {
     command = <<-EOT
+      ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ${self.network_interface.0.access_config.0.nat_ip}, --private-key=../../credentials/ssh-keys/key ../../ansible/zabbix-playbook.yaml &
       ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ${self.network_interface.0.access_config.0.nat_ip}, --private-key=../../credentials/ssh-keys/key ../../ansible/cassandra-start-playbook.yaml &&
       ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook -i ${self.network_interface.0.access_config.0.nat_ip}, --private-key=../../credentials/ssh-keys/key ../../ansible/nifi-start-playbook.yaml
     EOT

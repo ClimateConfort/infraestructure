@@ -1,0 +1,6 @@
+---
+- name: Zabbix Install Playbook
+  hosts: all
+  remote_user: user
+  roles:
+    - zabbix-install

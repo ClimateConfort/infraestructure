@@ -1,0 +1,38 @@
+- name: Ensure /etc/hadoop directory exists
+  become: yes
+  file:
+    path: /etc/hadoop
+    state: directory
+    mode: '0755'
+- name: Copy hdfs-site.xml to the remote node
+  become: yes
+  copy:
+    src: ../files/hdfs-site.xml
+    dest: /etc/hadoop/hdfs-site.xml
+
+- name: Copy core-site.xml to the remote node
+  become: yes
+  copy:
+    src: ../files/core-site.xml
+    dest: /etc/hadoop/core-site.xml
+
+#- name: Create /etc/hadoop directory inside NiFi container
+#  become: yes
+#  docker_container:
+#    name: nifi
+#    command: mkdir -p /etc/hadoop
+#   detach: yes
+
+- name: Copy core-site.xml into the container
+  become: yes
+  community.docker.docker_container_copy_into:
+    container: nifi
+    path: /etc/hadoop/core-site.xml
+    container_path: /opt/nifi/nifi-current/conf/core-site.xml
+
+- name: Copy hdfs-site.xml into the container
+  become: yes
+  community.docker.docker_container_copy_into:
+    container: nifi
+    path: /etc/hadoop/hdfs-site.xml
+    container_path: /opt/nifi/nifi-current/conf/hdfs-site.xml

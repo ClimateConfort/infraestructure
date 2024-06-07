@@ -1,0 +1,16 @@
+- name: Run NiFi container
+  become: yes
+  docker_container:
+    name: nifi
+    image: apache/nifi:latest
+    state: started
+    network_mode: host
+    env:
+      NIFI_WEB_HTTP_PORT: "8088"
+      SINGLE_USER_CREDENTIALS_USERNAME: "admin"
+      SINGLE_USER_CREDENTIALS_PASSWORD: "adminadminadmin"
+      NIFI_CLUSTER_IS_NODE: "true"
+      NIFI_ZK_CONNECT_STRING: "node1.c.pbl6-422712.internal:2181,node2.c.pbl6-422712.internal:2181,node3.c.pbl6-422712.internal:2181"
+      NIFI_SENSITIVE_PROPS_KEY: "somosloboyloba"
+      NIFI_CLUSTER_NODE_PROTOCOL_PORT: "9999"
+      NIFI_ELECTION_MAX_WAIT: 1 min

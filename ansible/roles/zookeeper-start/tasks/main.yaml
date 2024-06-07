@@ -1,0 +1,25 @@
+- name: Get hostname
+  ansible.builtin.set_fact:
+    hostname: "{{ ansible_fqdn }}"
+
+- name: Extract node index from hostname
+  ansible.builtin.set_fact:
+    node_index: "{{ hostname.split('.')[0][-1] | int }}"
+
+#- name: Set index in myid file
+#  become: yes
+#  ansible.builtin.lineinfile:
+#    dest: /etc/nifi/zookeeper/myid
+#    create: yes
+#    line: "{{ node_index }}"
+
+- name: Run Zookeeper container
+  become: yes
+  docker_container:
+    name: zookeeper
+    image: zookeeper
+    state: started
+    network_mode: host
+    env:
+      ZOO_MY_ID: "{{ node_index }}"
+      ZOO_SERVERS: "server.1=node1.c.pbl6-422712.internal:2888:3888;2181 server.2=node2.c.pbl6-422712.internal:2888:3888;2181 server.3=node3.c.pbl6-422712.internal:2888:3888;2181"

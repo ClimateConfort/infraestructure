@@ -1,0 +1,9 @@
+---
+- name: Nifi Install
+  hosts: all
+  remote_user: user
+  roles:
+  - nifi-connectivity
+  - zookeeper-start
+  - nifi-start
+  - nifi-config-file-copy

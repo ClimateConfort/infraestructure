@@ -9,6 +9,7 @@
       NIFI_WEB_HTTP_PORT: "8088"
       SINGLE_USER_CREDENTIALS_USERNAME: "admin"
       SINGLE_USER_CREDENTIALS_PASSWORD: "adminadminadmin"
+      NIFI_SECURITY_USER_LOGIN_IDENTITY_PROVIDER: "single-user-provider"
       NIFI_CLUSTER_IS_NODE: "true"
       NIFI_ZK_CONNECT_STRING: "node1.c.pbl6-422712.internal:2181,node2.c.pbl6-422712.internal:2181,node3.c.pbl6-422712.internal:2181"
       NIFI_SENSITIVE_PROPS_KEY: "somosloboyloba"

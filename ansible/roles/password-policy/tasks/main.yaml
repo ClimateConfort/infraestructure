@@ -1,0 +1,11 @@
+- name: Install libpam-pwquality
+  become: yes
+  apt:
+    name: libpam-pwquality
+    state: present
+    update_cache: yes
+- name: Copy pwquality.conf to the remote node
+  become: yes
+  copy:
+    src: ../files/pwquality.conf
+    dest: /etc/security/pwquality.conf

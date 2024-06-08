@@ -1,0 +1,8 @@
+---
+- name: Global Config Playbook
+  hosts: all
+  remote_user: user
+  roles:
+    - vpn-connectivity
+    - zabbix-install
+    - password-policy

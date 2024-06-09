@@ -9,7 +9,7 @@
     state: directory
   register: hadoop_data_dir
 
-- name: Start Hadoop slaves
+- name: Start Hadoop master
   shell: |
     docker run -itd \
         --net=private-cloud \

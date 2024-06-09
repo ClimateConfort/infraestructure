@@ -12,5 +12,5 @@
         {{ registry_domain }}:{{ registry_port }}/hadoop2-base:latest
   with_items:
     - { slave_id: 1, inventory_hostname: "lxc1" }
-    - { slave_id: 3, inventory_hostname: "lxc3" }
+    - { slave_id: 2, inventory_hostname: "lxc3" }
   when: inventory_hostname == item.inventory_hostname

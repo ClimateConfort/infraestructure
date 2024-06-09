@@ -1,0 +1,60 @@
+
+- name: Update APT package list
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: Install debconf-utils
+  become: yes
+  apt:
+    name: debconf-utils
+    state: present
+
+- name: Set Tripwire passphrase for Debconf
+  become: yes
+  debconf:
+    name: tripwire
+    question: tripwire/local-passphrase
+    value: somosloboyloba
+    vtype: password
+
+- name: Confirm Tripwire passphrase for Debconf
+  become: yes
+  debconf:
+    name: tripwire
+    question: tripwire/local-passphrase-again
+    value: somosloboyloba
+    vtype: password
+
+- name: Set Tripwire site key passphrase for Debconf
+  become: yes
+  debconf:
+    name: tripwire
+    question: tripwire/site-passphrase
+    value: somosloboyloba
+    vtype: password
+
+- name: Confirm Tripwire site key passphrase for Debconf
+  become: yes
+  debconf:
+    name: tripwire
+    question: tripwire/site-passphrase-again
+    value: somosloboyloba
+    vtype: password
+
+- name: Install Tripwire
+  become: yes
+  apt:
+    name: tripwire
+    state: present
+
+#- name: Initialize Tripwire
+#  become: yes
+#  command: tripwire --init
+#  register: init_output
+# ignore_errors: yes
+
+#- name: Print Tripwire initialization output
+#  become: yes
+#  debug:
+#    var: init_output.stdout_lines

@@ -22,8 +22,16 @@ RUN mkdir $KAFKA_PATH/plugins && \
     mkdir $KAFKA_PATH/plugins/kafka-hdfs-connect
     
 COPY kafka-connect/confluentinc-kafka-connect-hdfs-10.1.17/kafka-hdfs-connect $KAFKA_PATH/plugins/kafka-hdfs-connect
-  
+
 COPY kafka-connect/connect-distributed.properties $KAFKA_PATH/config
+# ---
+
+
+# Install Avro Converter
+# ---
+RUN mkdir $KAFKA_PATH/plugins/avro-converter
+    
+COPY kafka-connect/confluentinc-kafka-connect-avro-converter-7.6.1/avro-converter $KAFKA_PATH/plugins/avro-converter
 # ---
 
 COPY scripts $KAFKA_PATH

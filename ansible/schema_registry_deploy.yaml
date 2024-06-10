@@ -1,0 +1,6 @@
+---
+- name: Setup Confluent Schema Registry
+  hosts: all
+  remote_user: root
+  roles:
+    - schema_registry_setup

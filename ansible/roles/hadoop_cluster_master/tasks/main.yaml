@@ -18,5 +18,9 @@
         -p 9000:9000 \
         --name hadoop-master \
         --hostname hadoop-master \
+        --cpus=0.5 \
         -v {{ hadoop_data_dir.path }}:/data \
         {{ registry_domain }}:{{ registry_port }}/hadoop1-master:latest
+
+- name: Add crontab configuration for batch processing
+  shell: docker exec -d hadoop-master bash -c "echo '0 3 * * * hadoop jar /root/mapreduce/AvroMapReduce-1.0-SNAPSHOT.jar /topics/1.1.1/partition=0 /output/\$(date +\%Y-\%m-\%d)' >> /etc/crontab"

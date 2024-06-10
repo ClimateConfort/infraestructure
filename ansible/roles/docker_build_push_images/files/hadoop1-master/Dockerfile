@@ -8,5 +8,7 @@ RUN chmod 700 /etc/bootstrap.sh
 
 ENV BOOTSTRAP /etc/bootstrap.sh
 
+COPY mapreduce /root/mapreduce
+
 CMD ["/etc/bootstrap.sh", "-d"]
 

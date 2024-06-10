@@ -9,6 +9,7 @@
         --net=private-cloud \
         --name hadoop-slave{{ item.slave_id }} \
         --hostname hadoop-slave{{ item.slave_id }} \
+        --cpus=0.5 \
         {{ registry_domain }}:{{ registry_port }}/hadoop2-base:latest
   with_items:
     - { slave_id: 1, inventory_hostname: "lxc1" }

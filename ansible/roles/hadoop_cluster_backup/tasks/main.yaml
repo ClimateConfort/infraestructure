@@ -1,0 +1,36 @@
+---
+- name: Copy private key to the target machine
+  copy:
+    src: backup
+    dest: /root/.ssh/
+    mode: '0600'
+
+- name: Copy compress_hadoop_data.sh to the target machine
+  copy:
+    src: scripts/compress_hadoop_data.sh
+    dest: /root/compress_hadoop_data.sh
+    mode: '0755'
+
+- name: Copy copy_backup.sh to the target machine
+  copy:
+    src: scripts/copy_backup.sh
+    dest: /root/copy_backup.sh
+    mode: '0755'
+
+- name: Copy copy_backup_to_cloud.sh to the target machine
+  copy:
+    src: scripts/copy_backup_to_cloud.sh
+    dest: /root/copy_backup_to_cloud.sh
+    mode: '0755'
+
+- name: Set up crontab entries
+  cron:
+    name: "{{ item.name }}"
+    user: root
+    minute: "{{ item.minute }}"
+    hour: "{{ item.hour }}"
+    job: "{{ item.job }}"
+  with_items:
+    - { name: "Compress Hadoop data daily", minute: "0", hour: "2", job: "/root/compress_hadoop_data.sh" }
+    - { name: "Copy backup to the first remote host daily", minute: "0", hour: "3", job: "/root/copy_backup.sh" }
+    - { name: "Copy backup to the cloud machine daily", minute: "0", hour: "4", job: "/root/copy_backup_to_cloud.sh" }

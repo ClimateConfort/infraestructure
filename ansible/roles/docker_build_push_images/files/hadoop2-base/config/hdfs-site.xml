@@ -11,6 +11,19 @@
         <description>DataNode directory</description>
     </property>
     <property>
+        <name>dfs.namenode.rpc-address</name>
+        <value>hadoop-master:9000</value>
+    </property>
+    <property>
+        <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+        <value>false</value>
+    </property>
+    <!-- Configuración para que el NameNode escuche en todas las interfaces -->
+    <property>
+        <name>dfs.namenode.bindHost</name>
+        <value>0.0.0.0</value>
+    </property>
+    <property>
         <name>dfs.replication</name>
         <value>2</value>
     </property>

@@ -1,0 +1,103 @@
+---
+- name: Ensure UFW is installed
+  apt:
+    name: ufw
+    state: present
+    update_cache: yes
+
+- name: Ensure UFW is enabled
+  ufw:
+    state: enabled
+
+- name: Ensure UFW handles IPv6
+  lineinfile:
+    path: /etc/default/ufw
+    regexp: '^IPV6='
+    line: 'IPV6=yes'
+    create: yes
+
+
+- name: Allow (port 15672)
+  ufw:
+    rule: allow
+    port: '15672'
+    proto: tcp
+
+- name: Allow (port 5672)
+  ufw:
+    rule: allow
+    port: '5672'
+    proto: tcp
+
+- name: Allow (port 8081)
+  ufw:
+    rule: allow
+    port: '8081'
+    proto: tcp
+
+- name: Allow (port 8083)
+  ufw:
+    rule: allow
+    port: '8083'
+    proto: tcp
+
+- name: Allow (port 10004)
+  ufw:
+    rule: allow
+    port: '10004'
+    proto: tcp
+
+- name: Allow (port 9092)
+  ufw:
+    rule: allow
+    port: '9092'
+    proto: tcp
+
+- name: Allow (port 29094)
+  ufw:
+    rule: allow
+    port: '29094'
+    proto: tcp
+
+- name: Allow (port 25)
+  ufw:
+    rule: allow
+    port: '25'
+    proto: tcp
+
+- name: Allow (port 7946)
+  ufw:
+    rule: allow
+    port: '7946'
+    proto: tcp
+
+- name: Allow (port 7946)
+  ufw:
+    rule: allow
+    port: '7946'
+    proto: udp
+
+- name: Allow (port 22)
+  ufw:
+    rule: allow
+    port: '22'
+    proto: tcp
+
+- name: Allow (port 4789)
+  ufw:
+    rule: allow
+    port: '4789'
+    proto: udp
+
+- name: Set default policy to deny incoming connections
+  ufw:
+    default: deny
+    direction: incoming
+
+- name: Ensure UFW status is verbose
+  command: ufw status verbose
+  register: ufw_status
+
+- name: Debug UFW status
+  debug:
+    msg: "{{ ufw_status.stdout }}"

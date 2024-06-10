@@ -1,0 +1,6 @@
+---
+- name: Backups
+  hosts: lxc2
+  remote_user: root
+  roles:
+    - hadoop_cluster_backup

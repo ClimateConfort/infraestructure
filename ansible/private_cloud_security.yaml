@@ -1,0 +1,26 @@
+---
+- name: All LXC-s
+  hosts: all
+  remote_user: root
+  roles:
+    - password-policy
+    - tripwire-install
+
+- name: LXC-1
+  hosts: lxc1
+  remote_user: root
+  roles:
+    - firewall_lxc1
+
+- name: LXC-2
+  hosts: lxc2
+  remote_user: root
+  roles:
+    - hadoop_cluster_backup
+    - firewall_lxc2
+
+- name: LXC-3
+  hosts: lxc3
+  remote_user: root
+  roles:
+    - firewall_lxc3

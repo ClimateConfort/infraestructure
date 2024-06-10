@@ -19,7 +19,7 @@
         --name hadoop-master \
         --hostname hadoop-master \
         --cpus=0.5 \
-        -v {{ hadoop_data_dir.path }}:/data \
+        -v {{ hadoop_data_dir.path }}:/root/hdfs \
         {{ registry_domain }}:{{ registry_port }}/hadoop1-master:latest
 
 - name: Add crontab configuration for batch processing
